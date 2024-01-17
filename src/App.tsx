@@ -3,73 +3,61 @@ import './index.css'
 
 function App() {
 
-  type Pokemon = {
-
-  }
-
-  const [data, setData] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [pokemon, setPokemon] = useState({})
 
   const fetchData = async () => {
+    if (!searchTerm) {
+      return;
+    }
 
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
+      const fetchedPokemon = await response.json();
 
-    const result = await response.json();
-    setData(result);
-
+      setPokemon(fetchedPokemon);
+      console.log(fetchedPokemon);
+    } catch (error) {
+      console.error("Could not fetch:", error);
+      // You may want to handle errors and provide user feedback
+    }
   }
-
   useEffect(() => {
     fetchData();
   }, []);
 
-
   function search() {
     fetchData();
   }
+
   return (
     <>
-      <div className='flex flex-col justify-center items-center  h-full w-full mt-3'>
-        <div className='flex justify-center items-center'>
+      <img src="src\images\background.png" className='w-full h-screen absolute -z-30' />
+      <div className='flex flex-col justify-center items-center'>
+        <div className='flex justify-center items-center gap-5'>
           <input
             placeholder='Enter a pokemon'
             value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
             type='text'
-            className='border-black rounded shadow shadow-emerald-500/60 focus:shadow-emerald-600/60 p-2 outline-none bg-slate-100'
+            className='border-black rounded shadow shadow-emerald-500/60 focus:shadow-emerald-600/60 p-1 m-2  outline-none bg-slate-100 hover:bg-slate-200 focus:bg-slate-200'
           />
-          <button onClick={search} className='bg-slate-100 shadow shadow-emerald-500/60 hover:shadow-emerald-600/60 p-2' >Search</button>
+          <button onClick={search} className='bg-slate-100 shadow shadow-emerald-500/60 hover:shadow-emerald-600/60 p-1 hover:bg-slate-200' >Search</button>
         </div>
 
+        {pokemon.id && (
+          <>
+            <h1> Id: {pokemon.id}</h1>
+            <h1>Name: {pokemon.name}</h1>
+            <h1>Base xp: {pokemon.base_experience}</h1>
 
-        {data && (
-          <div className='flex flex-col justify-center items-center gap-3'>
-            <h2 className=''>{data.name}</h2>
-            <img className=''
-              width='150px' height='150px' src={data && data.sprites ? data.sprites.front_default : 'hidden'}></img>
-
-            <p>Base Experience: {data.base_experience}</p>
-            <p>Height: {data.height}</p>
-            <p>Weight: {data.weight}</p>
-            <p>Abilities: {data.abilities ? data.abilities.map((ability) => ability.ability.name).join(', ') : 'N/A'}</p>
-
-
-            <p>Moves: {data.moves ? data.moves.map((move) => move.move.name).join(', ') : 'N/A'}</p>
-
-            {data.stats && data.stats.length > 0 ? (
-              <p>
-                Stats:
-                <ul>
-                  {data.stats.map((stat: object) => (
-                    <li key={stat.stat.name}>{stat.stat.name}: {stat.base_stat}</li>
-                  ))}
-                </ul>
-              </p>
-            ) : (
-              <p>No stats available</p>
+            {pokemon.sprites && (
+              <img
+                src={pokemon.sprites.front_default}
+                alt={pokemon.name}
+                className='mt-3 block max-h-96 max-w-96'
+              />
             )}
-            {/* Types */}
-            <p>Types: {data.types ? data.types.map((type) => type.type.name).join(', ') : 'N/A'}</p>
-          </div>
+          </>
         )}
       </div>
     </>
