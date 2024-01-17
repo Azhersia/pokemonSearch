@@ -10,16 +10,15 @@ function App() {
     if (!searchTerm) {
       return;
     }
-
     try {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
+
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
       const fetchedPokemon = await response.json();
 
       setPokemon(fetchedPokemon);
       console.log(fetchedPokemon);
     } catch (error) {
       console.error("Could not fetch:", error);
-      // You may want to handle errors and provide user feedback
     }
   }
   useEffect(() => {
@@ -32,8 +31,7 @@ function App() {
 
   return (
     <>
-      <img src="src\images\background.png" className='w-full h-screen absolute -z-30' />
-      <div className='flex flex-col justify-center items-center'>
+      <div className='flex flex-col h-screen w-full  items-center'>
         <div className='flex justify-center items-center gap-5'>
           <input
             placeholder='Enter a pokemon'
@@ -44,21 +42,27 @@ function App() {
           <button onClick={search} className='bg-slate-100 shadow shadow-emerald-500/60 hover:shadow-emerald-600/60 p-1 hover:bg-slate-200' >Search</button>
         </div>
 
-        {pokemon.id && (
-          <>
-            <h1> Id: {pokemon.id}</h1>
-            <h1>Name: {pokemon.name}</h1>
-            <h1>Base xp: {pokemon.base_experience}</h1>
+        <div className='flex flex-col justify-center items-center bg-emerald-100 w-ful'>
+          {pokemon.id && (
+            <>
+              <h1>Name: {pokemon.name}</h1>
+              <h1>Base xp: {pokemon.base_experience}</h1>
+              <h1> Id: {pokemon.id}</h1>
 
-            {pokemon.sprites && (
-              <img
-                src={pokemon.sprites.front_default}
-                alt={pokemon.name}
-                className='mt-3 block max-h-96 max-w-96'
-              />
-            )}
-          </>
-        )}
+              {pokemon.sprites && (
+
+                <div className='flex justifty-center items-center ' >
+                  <img
+                    src={pokemon.sprites.front_default}
+                    alt={pokemon.name}
+                    className='flex mt-3 block max-h-96 max-w-96'
+                  />
+                </div>
+
+              )}
+            </>
+          )}
+        </div>
       </div>
     </>
   );
