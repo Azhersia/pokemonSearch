@@ -31,7 +31,7 @@ function App() {
 
   return (
     <>
-      <div className='flex flex-col h-screen w-full  items-center'>
+      <div className='flex flex-col h-screen w-full  justify-evenly items-center'>
         <div className='flex justify-center items-center gap-5'>
           <input
             placeholder='Enter a pokemon'
@@ -42,10 +42,10 @@ function App() {
           <button onClick={search} className='bg-slate-100 shadow shadow-emerald-500/60 hover:shadow-emerald-600/60 p-1 hover:bg-slate-200' >Search</button>
         </div>
 
-        <div className='flex flex-col justify-center items-center bg-emerald-100 w-ful'>
+        <div className='flex flex-col justify-center items-center bg-slate-300/60 w-ful rounded '>
           {pokemon.id && (
             <>
-              <h1>Name: {pokemon.name}</h1>
+              <h1 className='p-4'>Name: {pokemon.name}</h1>
               <h1>Base xp: {pokemon.base_experience}</h1>
               <h1> Id: {pokemon.id}</h1>
 
